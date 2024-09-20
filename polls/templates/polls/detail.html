@@ -1,0 +1,35 @@
+{% extends "polls/base.html" %} {% block content %}
+<form action="{% url 'polls:vote' question.id %}" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <legend><h1>{{ question.question_text }}</h1></legend>
+    {% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+
+    {% if question.was_published_recently %}
+    <p><strong>This is a new poll! Ask your friends to vote over the next day!</strong></p>
+    {% else %}
+    <p><strong>This poll is more than a day old and about to be closed soon. Vote soon!</strong></p>
+    {% endif %}
+
+    {% if question %}
+
+    {% for choice in question.choice_set.all %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+    {% endfor %}
+    <input type="submit" value="Vote" />
+    
+    {% else %}
+    <ul>
+    {% for choice in question.choice_set.all %}
+    <li>{{choice.choice_text}}: {{choice.votes}}</li>
+    {% endfor %}
+    </ul>
+
+    {% endif %}
+  </fieldset>
+
+</form>
+{% endblock %}
