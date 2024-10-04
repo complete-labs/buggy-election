@@ -19,6 +19,12 @@ source buggy-election/bin/activate
 # Install the requirements
 pip install -r requirements.txt
 
+# Set up your Postgres User
+psql postgres
+create user postgres;
+\du;
+grant <username/superuser> to postgres;
+
 # Run the DB migrations
 python manage.py migrate
 
